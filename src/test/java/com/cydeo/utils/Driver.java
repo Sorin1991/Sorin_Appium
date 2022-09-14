@@ -2,6 +2,7 @@ package com.cydeo.utils;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
+import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.remote.MobileCapabilityType;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -20,58 +21,46 @@ public class Driver {
 
     public static AppiumDriver<MobileElement> getDriver() {
         String platform = ConfigurationReader.getProperty("platform");
-
         if (Objects.isNull(driver)) {
-
             switch (platform) {
-
                 case "android":
                     DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
-                    desiredCapabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "UIAutomator2");
+                    desiredCapabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "UiAutomator2");
                     desiredCapabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, Platform.ANDROID);
                     desiredCapabilities.setCapability(MobileCapabilityType.PLATFORM_VERSION, "10.0");
                     desiredCapabilities.setCapability(MobileCapabilityType.DEVICE_NAME, "Pixel 3");
                     desiredCapabilities.setCapability(MobileCapabilityType.APP, "https://cybertek-appium.s3.amazonaws.com/calculator.apk");
-
                     try {
-                        url = new URL("http://localhost:4723/wb/hub");
-
+                        url = new URL("http://localhost:4723/wd/hub");
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
-
                     }
-
-                    driver = new AppiumDriver<>(url, desiredCapabilities);
+                    driver = new AndroidDriver<>(url, desiredCapabilities);
                     break;
-
                 case "android-remote":
-
                     DesiredCapabilities caps = new DesiredCapabilities();
 
-                    //Set your access credentials
+                    // Set your access credentials
                     caps.setCapability("browserstack.user", "testuser_1PhU8f");
                     caps.setCapability("browserstack.key", "qxU7LUK78o8BK1ki799f");
 
-
-                    //Set URL of the application under test
-
+                    // Set URL of the application under test
                     caps.setCapability("app", "bs://e0ce6dfd61f8f7d9fd9c4fb11c746b65fd1d79f1");
 
-                    //Specify device and os_version for testing
+                    // Specify device and os_version for testing
                     caps.setCapability("device", "OnePlus 8");
                     caps.setCapability("os_version", "10.0");
                     caps.setCapability("realMobile", "true");
 
-                    //Set other BrowserSack capabilities
+                    // Set other BrowserStack capabilities
                     caps.setCapability("project", "My test appium automation");
                     caps.setCapability("build", "Java Android");
                     caps.setCapability("name", "Regression");
 
-                    //Initialise the remote WebDriver using BrowserStack remote URL
-                    //and desired capabilities defined above
-
+                    // Initialise the remote Webdriver using BrowserStack remote URL
+                    // and desired capabilities defined above
                     try {
-                        driver = new AppiumDriver<>(new URL("http:hub.browserstack.com/wd/hub"), caps);
+                        driver = new AndroidDriver<>(new URL("http://hub.browserstack.com/wd/hub"), caps);
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
                     }
@@ -79,7 +68,6 @@ public class Driver {
             }
         }
         return driver;
-
     }
 
     public static void closeDriver() {
@@ -88,6 +76,4 @@ public class Driver {
             driver = null;
         }
     }
-
-
 }
